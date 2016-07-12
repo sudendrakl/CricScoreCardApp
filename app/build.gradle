@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
 
 
-def versionMajor = 3
-def versionMinor = 3
-def versionPatch = 2
+def versionMajor = 0
+def versionMinor = 0
+def versionPatch = 1
 
-def buildNumber = System.getenv("BUILD_NUMBER") as Integer ?: getDate()
-
-def getDate() {
-    def date = new Date()
-    def formattedDate = date.format('yyyyMMdd')
-    return formattedDate
-}
+def buildNumber = gitVersion()//System.getenv("BUILD_NUMBER") as Integer ?: getDate()
+//
+//def getDate() {
+//    def date = new Date()
+//    def formattedDate = date.format('yyyyMMdd')
+//    return formattedDate
+//}
 
 def gitVersion() {
     def process = "git rev-list HEAD --first-parent --count".execute()
@@ -40,7 +40,7 @@ android {
         }
         debug {
             //TODO
-            storeFile file("debug.keystore")
+            storeFile file("debug-keystore")
             storePassword "android"
         }
     }
@@ -63,8 +63,8 @@ android {
 
     productFlavors {
         stage {
-            applicationId "com.blackbeard.cricapp.stage"
-            versionName "${versionMajor}.${versionMinor}.${versionPatch}-${buildNumber}-stage"
+            applicationId "com.blackbeard.cricapp.debug"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}-${buildNumber}-debug"
         }
 
         prod {
@@ -108,3 +108,34 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support:support-annotations:23.4.0'
 }
+
+
+// change this to whatever your app's name is...
+project.archivesBaseName = 'CricScoreCard'
+
+project.android.applicationVariants.all { variant -> renameApk(variant)
+}
+
+def renameApk(variant) {
+    def apkPath = variant.outputs[0].outputFile.parent
+    def baseName = project.archivesBaseName
+
+    // add version name and version code
+    baseName += "-v${variant.mergedFlavor.versionName}"
+
+    // if it's a release build, the type is implicit, imo, so add it otherwise
+    //  if (variant.name != 'release') {
+    //    baseName += "-${variant.buildType.name}"
+    //  }
+
+    // if the variant will not be zipAligned, specify that
+    if (!variant.outputs[0].zipAlign) {
+        baseName += '-unaligned'
+    }
+    /*  from(variant.outputFile.path) {
+      rename '.*', "${baseName}.apk"
+    }*/
+    // set the output file
+    variant.outputs[0].outputFile = new File(apkPath, "${baseName}.apk");
+}
+
