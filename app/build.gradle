@@ -1,0 +1,110 @@
+apply plugin: 'com.android.application'
+
+
+def versionMajor = 3
+def versionMinor = 3
+def versionPatch = 2
+
+def buildNumber = System.getenv("BUILD_NUMBER") as Integer ?: getDate()
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd')
+    return formattedDate
+}
+
+def gitVersion() {
+    def process = "git rev-list HEAD --first-parent --count".execute()
+    return process.text.toInteger()
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+    defaultConfig {
+        applicationId "com.blackbeard.cricapp"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode gitVersion()
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}-${buildNumber}"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            //TODO
+            storeFile file("blackbeard-cricapp-keystore.jks")
+            storePassword "blackBeardCricApp"
+            keyAlias "blackBeardKeystore"
+            keyPassword "blackBeardCricApp"
+        }
+        debug {
+            //TODO
+            storeFile file("debug.keystore")
+            storePassword "android"
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles 'proguard-android.txt', 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            versionNameSuffix "-release"
+        }
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            versionNameSuffix "-debug"
+        }
+    }
+
+    productFlavors {
+        stage {
+            applicationId "com.blackbeard.cricapp.stage"
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}-${buildNumber}-stage"
+        }
+
+        prod {
+            versionName "${versionMajor}.${versionMinor}.${versionPatch}-${buildNumber}-prod"
+        }
+    }
+
+//    sourceSets {
+//        prod {
+//            java.srcDirs = ['src/prod/java']
+//        }
+//
+//        stage {
+//            java.srcDirs = ['src/stage/java']
+//        }
+//    }
+
+    lintOptions {
+        disable 'InvalidPackage' //for Butterknife injection
+        checkReleaseBuilds true
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+
+
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+}
