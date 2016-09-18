@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "689672580066",
+    "firebase_url": "https://fleet-tractor-118515.firebaseio.com",
+    "project_id": "fleet-tractor-118515",
+    "storage_bucket": "fleet-tractor-118515.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689672580066:android:f296bb3b62d0700a",
+        "android_client_info": {
+          "package_name": "com.blackbeard.cricapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689672580066-ncp3e5veq2nvbie0upg12um4q44qj06f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blackbeard.cricapp",
+            "certificate_hash": "31E936DAA634A50F3A448F42CA4419F99147F3D5"
+          }
+        },
+        {
+          "client_id": "689672580066-ucpprbgp8lm6le94dkbjra1m03b6m4ka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkJrWxeSveDy357l9nOrmEXx13h71KWG8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689672580066-ucpprbgp8lm6le94dkbjra1m03b6m4ka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
